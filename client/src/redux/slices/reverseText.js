@@ -26,7 +26,9 @@ export const { AddReversedString, ClearReversedStrings, SetWarning } = reverseTe
 
 export const getReversedString = payload => async dispatch => {
   try {
-    const reversedText = await axios.get(`http://localhost:3001/reverseText?text=${payload}`)
+    const reversedText = await axios.get(
+      `https://cw-test-backend.herokuapp.com/reverseText?text=${payload}`
+    )
     console.log(reversedText.data)
     dispatch(AddReversedString(reversedText.data))
   } catch (error) {
