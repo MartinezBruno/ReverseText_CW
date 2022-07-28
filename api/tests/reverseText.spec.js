@@ -1,9 +1,9 @@
 const request = require('supertest')
 const { expect } = require('chai')
-const { server: app } = require('../src/app')
+const app = require('../src/app')
 
 // help function to test the reverseText endpoint
-const { backwardsText } = require('../src/app')
+const backwardsText = text => text.split('').reverse().join('')
 
 describe('Reverse Text', () => {
   it('should get 200', () => {
@@ -23,13 +23,22 @@ describe('Reverse Text', () => {
         expect(res.body.error).to.equal('no text')
       })
   })
-  it('should return 200 when text is not a string', () => {
+  it('should return 200 when text contains numbers', () => {
     const text = 'Hello World!1!1'
     return request(app)
       .get(`/reverseText?text=${text}`)
       .expect(200)
       .then(res => {
         expect(res.body.text).to.equal(backwardsText(text))
+      })
+  })
+  it('should return 400 when the text is just numbers', () => {
+    const text = '12345'
+    return request(app)
+      .get(`/reverseText?text=${text}`)
+      .expect(400)
+      .then(res => {
+        expect(res.body.error).to.equal('no text')
       })
   })
   it('should return 200 when text is a palindrome', () => {
